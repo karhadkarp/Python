@@ -10,11 +10,18 @@ def getDBConnection(username, password, database):
     #    cluster = MongoClient(
     #        'mongodb+srv://dilsedigital007:wh1teMayur@cluster0.opahplu.mongodb.net/Mongodb?retryWrites=true&w=majority')
 
-    db = cluster["sldb"]
-    collection = db["employee"]
+    db = cluster["RMApp"]
+    return db
+
+def getProducts(database):
+    
+    collection = database["ProductData"]
+    collection.find_one()
+
+def addProducts(products, database):
+    collection = database["ProductData"]
     post = {"name": "amar", "email": "amar@mail.com"}
 
     collection.insert_one(post)
-
-
+    
 getDBConnection('dilsedigital007', 'wh1teMayur', 'Mongodb')
