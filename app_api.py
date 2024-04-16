@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import email1
+import db.connection
 
 app = Flask(__name__)
 
@@ -25,9 +26,9 @@ def send_data():
    
 @app.route('/products', methods=['POST'])
 def get_products():    
-    content=email1.multiturn_generate_content(prompt,temperature)     
-    print(content)
-    return content
+    products = db.get_products()
+    print(products)
+    return products
 
 
 if __name__ == '__main__':
