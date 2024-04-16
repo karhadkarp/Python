@@ -16,7 +16,9 @@ def getDBConnection(username, password, database):
 def getProducts(database):
     
     collection = database["ProductData"]
-    collection.find_one()
+    cursor = collection.find_one()
+
+    return cursor
 
 def addProducts(products, database):
     collection = database["ProductData"]
