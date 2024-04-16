@@ -3,7 +3,7 @@ from pymongo import MongoClient
 from pymongo import collection
 
 cluster = MongoClient(
-    'mongodb+srv://admin:admin123@cluster0.fbsul.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
+    'mongodb+srv://dilsedigital007:wh1teMayur@cluster0.opahplu.mongodb.net/MongoDB?retryWrites=true&w=majority')
 
 db = cluster["sldb"]
 collection = db["employee"]
