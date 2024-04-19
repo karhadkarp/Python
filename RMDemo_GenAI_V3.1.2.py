@@ -29,6 +29,27 @@ def getCustomerProducts(custID, productID, customPrompt):
   listofDocuments = list(cursor)
   productdf2 = pd.DataFrame(listofDocuments)
   
+  pd.options.display.max_colwidth = 200 
+  Product_Name = productdf2['ProductName'].to_string(index=False)
+  return Product_Name
+
+def getPrompt(custID, productID, customPrompt):
+  client = MongoClient('mongodb+srv://dilsedigital007:wh1teMayur@cluster0.opahplu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+  
+  mydatabase = client.RMApp
+  mycollection = mydatabase.CustData
+  cursor = mycollection.find({"CustomerId" : custID})
+  listofDocuments = list(cursor)
+  custdf2 = pd.DataFrame(listofDocuments)
+  #custdf2
+  # Need col
+  custdf2[['Custname', 'CreditScore','Geography','Gender','Age','Tenure','Balance','NumOfProducts','HasCrCard','IsActiveMember','EstimatedSalaryOrIncome']]
+  
+  mycollection = mydatabase.productData
+  cursor = mycollection.find({"ProductID" : productID})
+  listofDocuments = list(cursor)
+  productdf2 = pd.DataFrame(listofDocuments)
+  
   #productdf2 = productdf.query('ProductID == @productID')
   #productdf2
   
