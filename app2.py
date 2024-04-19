@@ -31,16 +31,19 @@ def send_customer_data():
     data = request.json    
     # Do something with the received data
     print("Received data:", data)
+    customPrompt=''
     customerId=''
     temperature=''
     # Print only the values
     for key,value in data.items():
+        if key == "prompt" : 
+            customPrompt = value
         if key == "customerId":
             customerId = value
         if key == "temperature":
             temperature = value
         print("Temperature is: ", temperature)
-    prompt = RMDemo_GenAI_V3.1.2.getCustomerProducts(customerId)
+    prompt = RMDemo_GenAI_V3.1.2.getPrompt(customerId, productId, customPrompt)
     content=email1.multiturn_generate_content(prompt,temperature)     
     print(content)
     return content   
