@@ -12,7 +12,7 @@ from pymongo import MongoClient
 #custID = 15737888
 #productID = 2
 
-def getCustomerProducts(custID, productID, customPrompt):
+def getCustomerProducts(custID):
   client = MongoClient('mongodb+srv://dilsedigital007:wh1teMayur@cluster0.opahplu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
   
   mydatabase = client.RMApp
