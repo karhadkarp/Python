@@ -2,7 +2,7 @@
 # coding: utf-8
 import pandas as pd
 from pymongo import MongoClient
-
+import json
 
 # custdf= pd.read_csv('CustData.csv')
 # productdf = pd.read_csv('productData.csv')
@@ -22,12 +22,16 @@ def get_customer_info(custID):
     customer_info = custdf3
     if len(customer_info) == 0:
         print("Customer ID not found.")
-        return None, None
+        return None
     cust_name = customer_info['Custname'].values[0]
     sug_products = customer_info[['SugProdID1', 'SugProdName1', 'SugProdID2', 'SugProdName2', 'SugProdID3', 'SugProdName3']]
     sug_products_list = sug_products.values.tolist()[0]
-    sug_products_2d = [[sug_products_list[i], sug_products_list[i+1]] for i in range(0, len(sug_products_list), 2)]
-    return cust_name, sug_products_2d
+    sug_products_2d = [{'SugProdID': sug_products_list[i], 'SugProdName': sug_products_list[i+1]} for i in range(0, len(sug_products_list), 2)]
+    result_json = {
+        'cust_name': cust_name,
+        'sug_products': sug_products_2d
+    }
+    return json.dumps(result_json)
 
 
 def getPrompt(custID, productID, customPrompt):
