@@ -62,10 +62,9 @@ def get_products():
     for key, value in data.items():
         if key == "customer_id":
             customer_id = value
-    cust_name, sug_products = customer_prompt.get_customer_info(customer_id)
-    print(cust_name)
-    print(sug_products)
-    return cust_name, sug_products
+    cust_products_json = customer_prompt.get_customer_info(int(customer_id))
+    return cust_products_json
+
 
 if __name__ == '__main__':
     app.run(debug=True)
