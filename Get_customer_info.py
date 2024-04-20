@@ -18,7 +18,7 @@ def get_customer_info(customer_id):
     customer_info = custdf3
     if len(customer_info) == 0:
         print("Customer ID not found.")
-        return None, None
+        return None
     cust_name = customer_info['Custname'].values[0]
     sug_products = customer_info[['SugProdID1', 'SugProdName1', 'SugProdID2', 'SugProdName2', 'SugProdID3', 'SugProdName3']]
     sug_products_list = sug_products.values.tolist()[0]
