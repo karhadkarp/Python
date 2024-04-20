@@ -12,7 +12,7 @@ import json
 # custID = 15737888
 # productID = 2
 
-def get_customer_info(custID):
+def get_customer_info(customer_id):
     client = MongoClient('mongodb+srv://dilsedigital007:wh1teMayur@cluster0.opahplu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
     mydatabase = client.RMApp
     mycollection = mydatabase.CustData
@@ -31,6 +31,7 @@ def get_customer_info(custID):
         'cust_name': cust_name,
         'sug_products': sug_products_2d
     }
+    print(json.dumps(result_json))
     return json.dumps(result_json)
 
 
