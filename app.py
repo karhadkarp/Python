@@ -54,7 +54,7 @@ def send_customer_data():
 
 @app.route('/products', methods=['POST'])
 def get_products():    
-    products = customer_prompt.get_products()
+    products = customer_prompt.get_customer_products()
     print(products)
     return products
 
