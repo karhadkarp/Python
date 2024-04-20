@@ -36,7 +36,7 @@ def get_customer_products(custID):
 
     pd.options.display.max_colwidth = 200
     Product_Name = productdf2['ProductName'].to_string(index=False)
-    return Product_Name
+    return ['Regalia Credit Card','Personal Loan','Home Loan']
 
 
 def getPrompt(custID, productID, customPrompt):
