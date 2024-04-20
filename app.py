@@ -53,8 +53,16 @@ def send_customer_data():
     return content
 
 @app.route('/products', methods=['POST'])
-def get_products():    
-    products = customer_prompt.get_customer_products()
+def get_products():
+    data = request.json
+    # Do something with the received data
+    print("Received data:", data)
+    customer_id = ''
+    # Print only the values
+    for key, value in data.items():
+        if key == "customer_id":
+            customer_id = value
+    products = customer_prompt.get_customer_products(customer_id)
     print(products)
     return products
 
