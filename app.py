@@ -40,7 +40,7 @@ def send_customer_data():
     for key, value in data.items():
         if key == "product_id":
             product_id = value
-        if key == "prompt":
+        if key == "custom_prompt":
             custom_prompt = value
         if key == "customerId":
             customer_id = value
