@@ -62,7 +62,7 @@ def get_products():
     for key, value in data.items():
         if key == "customer_id":
             customer_id = value
-    products = customer_prompt.get_customer_products(customer_id)
+    products = customer_prompt.get_customer_info(customer_id)
     print(products)
     return products
 
