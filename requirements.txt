@@ -3,3 +3,4 @@ flask-cors
 vertexai==1.46.0
 google-cloud-aiplatform==1.46.0
 pymongo
+pandas
