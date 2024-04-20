@@ -12,31 +12,22 @@ from pymongo import MongoClient
 # custID = 15737888
 # productID = 2
 
-def get_customer_products(custID):
-    client = MongoClient(
-        'mongodb+srv://dilsedigital007:wh1teMayur@cluster0.opahplu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
-
+def get_customer_info(custID):
+    client = MongoClient('mongodb+srv://dilsedigital007:wh1teMayur@cluster0.opahplu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
     mydatabase = client.RMApp
     mycollection = mydatabase.CustData
-    cursor = mycollection.find({"CustomerId": custID})
+    cursor = mycollection.find({"CustomerId" : customer_id})
     listofDocuments = list(cursor)
-    custdf2 = pd.DataFrame(listofDocuments)
-    print(custdf2["SugProdName1"])
-    print(custdf2["SugProdName2"])
-    print(custdf2["SugProdName3"])
-    # custdf2
-    # Need col
-    custdf2[['Custname', 'CreditScore', 'Geography', 'Gender', 'Age', 'Tenure', 'Balance', 'NumOfProducts', 'HasCrCard',
-             'IsActiveMember', 'EstimatedSalaryOrIncome']]
-
-    mycollection = mydatabase.productData
-    cursor = mycollection.find({"ProductID": productID})
-    listofDocuments = list(cursor)
-    productdf2 = pd.DataFrame(listofDocuments)
-
-    pd.options.display.max_colwidth = 200
-    Product_Name = productdf2['ProductName'].to_string(index=False)
-    return ['Regalia Credit Card','Personal Loan','Home Loan']
+    custdf3 = pd.DataFrame(listofDocuments)
+    customer_info = custdf3
+    if len(customer_info) == 0:
+        print("Customer ID not found.")
+        return None, None
+    cust_name = customer_info['Custname'].values[0]
+    sug_products = customer_info[['SugProdID1', 'SugProdName1', 'SugProdID2', 'SugProdName2', 'SugProdID3', 'SugProdName3']]
+    sug_products_list = sug_products.values.tolist()[0]
+    sug_products_2d = [[sug_products_list[i], sug_products_list[i+1]] for i in range(0, len(sug_products_list), 2)]
+    return cust_name, sug_products_2d
 
 
 def getPrompt(custID, productID, customPrompt):
