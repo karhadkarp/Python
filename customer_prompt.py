@@ -28,6 +28,7 @@ def get_customer_info(customer_id):
     sug_products_list = sug_products.values.tolist()[0]
     sug_products_2d = [{'SugProdID': sug_products_list[i], 'SugProdName': sug_products_list[i+1]} for i in range(0, len(sug_products_list), 2)]
     result_json = {
+        'customer_id': customer_id,
         'cust_name': cust_name,
         'sug_products': sug_products_2d
     }
