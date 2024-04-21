@@ -3,6 +3,7 @@
 import pandas as pd
 from pymongo import MongoClient
 import json
+import certifi
 
 # custdf= pd.read_csv('CustData.csv')
 # productdf = pd.read_csv('productData.csv')
@@ -13,7 +14,7 @@ import json
 # productID = 2
 
 def get_customer_info(customer_id):
-    client = MongoClient('mongodb+srv://dilsedigital007:wh1teMayur@cluster0.opahplu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+    client = MongoClient('mongodb+srv://dilsedigital007:wh1teMayur@cluster0.opahplu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', tlsCAFile=certifi.where())
     mydatabase = client.RMApp
     mycollection = mydatabase.CustData
     cursor = mycollection.find({"CustomerId" : customer_id})
@@ -35,13 +36,44 @@ def get_customer_info(customer_id):
     print(json.dumps(result_json))
     return json.dumps(result_json)
 
+def customers_list(customer_name):
+    client = MongoClient('mongodb+srv://dilsedigital007:wh1teMayur@cluster0.opahplu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', tlsCAFile=certifi.where())
+    mydatabase = client.RMApp
+    mycollection = mydatabase.CustData
+    cursor = mycollection.find({"Custname" : {"$regex": customer_name, "$options": 'i'}})
+    listofDocuments = list(cursor)
+    final_result = []
+    i = 0
+    # print(listofDocuments[0])
+    for item in listofDocuments:
+            cust_name =  item['Custname']
+            customer_id = item['CustomerId']
+            sug_products_list = []
+            if ('SugProdID1' in item.keys()):
+                sug_products_list.append(item['SugProdID1'])
+                sug_products_list.append(item['SugProdName1'])
+            if('SugProdID2' in item.keys()):
+                sug_products_list.append(item['SugProdID2'])
+                sug_products_list.append(item['SugProdName2'])
+            if('SugProdID3' in item.keys()):
+                sug_products_list.append(item['SugProdID3'])
+                sug_products_list.append(item['SugProdName3'])
+            if ('SugProdID1' in item.keys()):
+                sug_products_2d = [{'SugProdID': sug_products_list[i], 'SugProdName': sug_products_list[i+1]} for i in range(0, len(sug_products_list), 2)]
+                result_json = {
+                    'customer_id': customer_id,
+                    'cust_name': cust_name,
+                    'sug_products': sug_products_2d
+                }
+                final_result.append(result_json)
+    return json.dumps(final_result)
 
 def getPrompt(custID, productID, customPrompt):
     print(int(custID))
     print(int(productID))
     print("Custom Prompt :" + customPrompt)
     client = MongoClient(
-        'mongodb+srv://dilsedigital007:wh1teMayur@cluster0.opahplu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+        'mongodb+srv://dilsedigital007:wh1teMayur@cluster0.opahplu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', tlsCAFile=certifi.where())
 
     mydatabase = client.RMApp
     mycollection = mydatabase.CustData
@@ -85,5 +117,5 @@ def getPrompt(custID, productID, customPrompt):
     context = 'I am a Relationship manager working with the reputed bank.I like to send a mail to the one of my customer regarding sale of a product. Following are the customer details'
     guidelines = 'While writing mail follow these guidelines : 1. writes a personilised mail to customer. 2. consider the all details provide to make mail more personlised but don not quote exact figures like account balance or credit score. '
     productDetails = f'Below are product details which I try to sale from this email . Product Name : {Product_Name} Product Features : {Product_Features}'
-    prompt = context + custbackground2 + guidelines + productDetails + customPrompt
+    prompt = context + custbackground2 + guidelines + productDetails + customPrompt + ". Please send the response in HTML format."
     return prompt
