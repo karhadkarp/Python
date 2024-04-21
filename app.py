@@ -42,7 +42,7 @@ def send_customer_data():
             product_id = value
         if key == "custom_prompt":
             custom_prompt = value
-        if key == "customerId":
+        if key == "customer_id":
             customer_id = value
         if key == "temperature":
             temperature = value
@@ -63,6 +63,19 @@ def get_products():
         if key == "customer_id":
             customer_id = value
     cust_products_json = customer_prompt.get_customer_info(int(customer_id))
+    return cust_products_json
+
+@app.route('/customers', methods=['POST'])
+def get_customers():
+    data = request.json
+    # Do something with the received data
+    print("Received data:", data)
+    customer_name = ''
+    # Print only the values
+    for key, value in data.items():
+        if key == "customer_name":
+            customer_name = value
+    cust_products_json = customer_prompt.customers_list(customer_name)
     return cust_products_json
 
 
