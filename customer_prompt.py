@@ -6,6 +6,11 @@ import json
 import certifi
 # Import the Secret Manager client library.
 from google.cloud import secretmanager
+import base64
+import vertexai
+from vertexai.generative_models import GenerativeModel, Part
+import vertexai.preview.generative_models as generative_models
+
 
 # custdf= pd.read_csv('CustData.csv')
 # productdf = pd.read_csv('productData.csv')
@@ -15,7 +20,7 @@ from google.cloud import secretmanager
 # custID = 15737888
 # productID = 2
 
-def get_database_creds(project_id: str, secret_id: str, version_id: int) -> None:  
+def get_database_creds(project_id: str, secret_id: str, version_id: int):
     # Create the Secret Manager client.
     client = secretmanager.SecretManagerServiceClient()
 
@@ -28,12 +33,14 @@ def get_database_creds(project_id: str, secret_id: str, version_id: int) -> None
     # Return the decoded payload.
     return response.payload.data.decode('UTF-8')
 
-def get_customer_info(customer_id):
-    get_database_creds('starlit-zoo-420014', 'DBPass', 1)
-    client = MongoClient('mongodb+srv://dilsedigital007:wh1teMayur@cluster0.opahplu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', tlsCAFile=certifi.where())
+
+def get_customer_info(customer_id, credentials):
+    client = MongoClient(
+        'mongodb+srv://' + credentials + '@cluster0.opahplu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
+        tlsCAFile=certifi.where())
     mydatabase = client.RMApp
     mycollection = mydatabase.CustData
-    cursor = mycollection.find({"CustomerId" : customer_id})
+    cursor = mycollection.find({"CustomerId": customer_id})
     listofDocuments = list(cursor)
     custdf3 = pd.DataFrame(listofDocuments)
     customer_info = custdf3
@@ -41,9 +48,11 @@ def get_customer_info(customer_id):
         print("Customer ID not found.")
         return None
     cust_name = customer_info['Custname'].values[0]
-    sug_products = customer_info[['SugProdID1', 'SugProdName1', 'SugProdID2', 'SugProdName2', 'SugProdID3', 'SugProdName3']]
+    sug_products = customer_info[
+        ['SugProdID1', 'SugProdName1', 'SugProdID2', 'SugProdName2', 'SugProdID3', 'SugProdName3']]
     sug_products_list = sug_products.values.tolist()[0]
-    sug_products_2d = [{'SugProdID': sug_products_list[i], 'SugProdName': sug_products_list[i+1]} for i in range(0, len(sug_products_list), 2)]
+    sug_products_2d = [{'SugProdID': sug_products_list[i], 'SugProdName': sug_products_list[i + 1]} for i in
+                       range(0, len(sug_products_list), 2)]
     result_json = {
         'customer_id': customer_id,
         'cust_name': cust_name,
@@ -52,50 +61,54 @@ def get_customer_info(customer_id):
     print(json.dumps(result_json))
     return json.dumps(result_json)
 
-def customers_list(customer_name):
-    get_database_creds('starlit-zoo-420014', 'DBPass', 1)
-    client = MongoClient('mongodb+srv://dilsedigital007:wh1teMayur@cluster0.opahplu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', tlsCAFile=certifi.where())
+
+def customers_list(customer_name, credentials):
+    client = MongoClient(
+        'mongodb+srv://' + credentials + '@cluster0.opahplu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
+        tlsCAFile=certifi.where())
     mydatabase = client.RMApp
     mycollection = mydatabase.CustData
-    cursor = mycollection.find({"Custname" : {"$regex": customer_name, "$options": 'i'}})
+    cursor = mycollection.find({"Custname": {"$regex": customer_name, "$options": 'i'}})
     listofDocuments = list(cursor)
     final_result = []
     i = 0
     # print(listofDocuments[0])
     for item in listofDocuments:
-            cust_name =  item['Custname']
-            customer_id = item['CustomerId']
-            sug_products_list = []
-            if ('SugProdID1' in item.keys()):
-                sug_products_list.append(item['SugProdID1'])
-                sug_products_list.append(item['SugProdName1'])
-            if('SugProdID2' in item.keys()):
-                sug_products_list.append(item['SugProdID2'])
-                sug_products_list.append(item['SugProdName2'])
-            if('SugProdID3' in item.keys()):
-                sug_products_list.append(item['SugProdID3'])
-                sug_products_list.append(item['SugProdName3'])
-            if ('SugProdID1' in item.keys()):
-                sug_products_2d = [{'SugProdID': sug_products_list[i], 'SugProdName': sug_products_list[i+1]} for i in range(0, len(sug_products_list), 2)]
-                result_json = {
-                    'customer_id': customer_id,
-                    'cust_name': cust_name,
-                    'sug_products': sug_products_2d
-                }
-                final_result.append(result_json)
+        cust_name = item['Custname']
+        customer_id = item['CustomerId']
+        sug_products_list = []
+        if ('SugProdID1' in item.keys()):
+            sug_products_list.append(item['SugProdID1'])
+            sug_products_list.append(item['SugProdName1'])
+        if ('SugProdID2' in item.keys()):
+            sug_products_list.append(item['SugProdID2'])
+            sug_products_list.append(item['SugProdName2'])
+        if ('SugProdID3' in item.keys()):
+            sug_products_list.append(item['SugProdID3'])
+            sug_products_list.append(item['SugProdName3'])
+        if ('SugProdID1' in item.keys()):
+            sug_products_2d = [{'SugProdID': sug_products_list[i], 'SugProdName': sug_products_list[i + 1]} for i in
+                               range(0, len(sug_products_list), 2)]
+            result_json = {
+                'customer_id': customer_id,
+                'cust_name': cust_name,
+                'sug_products': sug_products_2d
+            }
+            final_result.append(result_json)
     return json.dumps(final_result)
 
-def getPrompt(custID, productID, customPrompt):
-    get_database_creds('starlit-zoo-420014', 'DBPass', 1)
+
+def getPrompt(custID, productID, customPrompt, credentials):
     print(int(custID))
     print(int(productID))
     print("Custom Prompt :" + customPrompt)
     client = MongoClient(
-        'mongodb+srv://dilsedigital007:wh1teMayur@cluster0.opahplu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', tlsCAFile=certifi.where())
+        'mongodb+srv://' + credentials + '@cluster0.opahplu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
+        tlsCAFile=certifi.where())
 
     mydatabase = client.RMApp
     mycollection = mydatabase.CustData
-    #custID = 15737888
+    # custID = 15737888
     cursor = mycollection.find({"CustomerId": int(custID)})
     listofDocuments = list(cursor)
     custdf2 = pd.DataFrame(listofDocuments)
@@ -137,3 +150,41 @@ def getPrompt(custID, productID, customPrompt):
     productDetails = f'Below are product details which I try to sale from this email . Product Name : {Product_Name} Product Features : {Product_Features}'
     prompt = context + custbackground2 + guidelines + productDetails + customPrompt + ". Please send the response in HTML format."
     return prompt
+
+
+def multiturn_generate_content(prompt, temperature, project_id, location_id="asia-south1"):
+    print("Temperature is :", temperature)
+    generation_config = setTemperature(temperature)
+    print("Prompt: ", prompt)
+    prompt = prompt + ". Please send the response in HTML format."
+    vertexai.init(project=project_id, location=location_id)
+    model = GenerativeModel(
+        "gemini-1.0-pro-001",
+    )
+    chat = model.start_chat()
+
+    GenerationResponse = chat.send_message(
+        [prompt],
+        generation_config=generation_config,
+        safety_settings=safety_settings
+    )
+
+    # print(GenerationResponse.text)
+    return GenerationResponse.text
+
+
+def setTemperature(temperature):
+    generation_config = {
+        "max_output_tokens": 2048,
+        "temperature": float(temperature),
+        "top_p": 1,
+    }
+    return generation_config
+
+
+safety_settings = {
+    generative_models.HarmCategory.HARM_CATEGORY_HATE_SPEECH: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+    generative_models.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+    generative_models.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+    generative_models.HarmCategory.HARM_CATEGORY_HARASSMENT: generative_models.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+}
