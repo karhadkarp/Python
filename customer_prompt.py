@@ -15,7 +15,7 @@ from google.cloud import secretmanager
 # custID = 15737888
 # productID = 2
 
-def list_secrets(project_id: str) -> None:
+def list_secrets(project_id: str, secret_id: str, version_id: int) -> None:
     """
     List all secrets in the given project.
     """
@@ -23,12 +23,14 @@ def list_secrets(project_id: str) -> None:
     # Create the Secret Manager client.
     client = secretmanager.SecretManagerServiceClient()
 
-    # Build the resource name of the parent project.
-    parent = f"projects/{project_id}"
+    # Build the resource name of the secret version.
+    name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
 
-    # List all secrets.
-    for secret in client.list_secrets(request={"parent": parent}):
-        print(f"Found secret: {secret.name}")
+    # Access the secret version.
+    response = client.access_secret_version(name=name)
+    print(response.payload.data.decode('UTF-8'))
+    # Return the decoded payload.
+    return response.payload.data.decode('UTF-8')
 
 def get_customer_info(customer_id):
     list_secrets('starlit-zoo-420014')
