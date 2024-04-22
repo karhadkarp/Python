@@ -15,11 +15,7 @@ from google.cloud import secretmanager
 # custID = 15737888
 # productID = 2
 
-def list_secrets(project_id: str, secret_id: str, version_id: int) -> None:
-    """
-    List all secrets in the given project.
-    """
-    
+def get_database_creds(project_id: str, secret_id: str, version_id: int) -> None:  
     # Create the Secret Manager client.
     client = secretmanager.SecretManagerServiceClient()
 
@@ -33,7 +29,7 @@ def list_secrets(project_id: str, secret_id: str, version_id: int) -> None:
     return response.payload.data.decode('UTF-8')
 
 def get_customer_info(customer_id):
-    list_secrets('starlit-zoo-420014')
+    get_database_creds('starlit-zoo-420014', 'DBPass', 1)
     client = MongoClient('mongodb+srv://dilsedigital007:wh1teMayur@cluster0.opahplu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', tlsCAFile=certifi.where())
     mydatabase = client.RMApp
     mycollection = mydatabase.CustData
@@ -57,7 +53,7 @@ def get_customer_info(customer_id):
     return json.dumps(result_json)
 
 def customers_list(customer_name):
-    list_secrets('starlit-zoo-420014')
+    get_database_creds('starlit-zoo-420014', 'DBPass', 1)
     client = MongoClient('mongodb+srv://dilsedigital007:wh1teMayur@cluster0.opahplu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', tlsCAFile=certifi.where())
     mydatabase = client.RMApp
     mycollection = mydatabase.CustData
@@ -90,7 +86,7 @@ def customers_list(customer_name):
     return json.dumps(final_result)
 
 def getPrompt(custID, productID, customPrompt):
-    list_secrets('starlit-zoo-420014')
+    get_database_creds('starlit-zoo-420014', 'DBPass', 1)
     print(int(custID))
     print(int(productID))
     print("Custom Prompt :" + customPrompt)
