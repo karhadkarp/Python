@@ -111,12 +111,22 @@ def getPrompt(custID, productID, customPrompt, credentials):
              'IsActiveMember', 'EstimatedSalaryOrIncome']]
 
     mycollection = mydatabase.productData
-    cursor = mycollection.find({"ProductID": int(productID)})
-    listofDocuments = list(cursor)
-    productdf2 = pd.DataFrame(listofDocuments)
 
-    # productdf2 = productdf.query('ProductID == @productID')
-    # productdf2
+    # Fetching product details for each product ID
+    product_details = []
+    for product in productID:
+        cursor = mycollection.find({"ProductID": int(product)})
+        productdf2 = pd.DataFrame(list(cursor))
+            
+            # Appending product details to the list
+        Product_Name = productdf2['ProductName'].to_string(index=False)
+        Product_Features = productdf2['Features'].to_string(index=False)
+        product_details.append(f'Product Name : {Product_Name}\nProduct Features : {Product_Features}')
+            
+     # Concatenating product details for the current product
+    product_details_str = '\n'.join(product_details)       
+    #product_details_str
+    #product_details
 
     Customer_Name = custdf2['Custname'].to_string(index=False)
     Customer_Credit_Score = custdf2['CreditScore'].to_string(index=False)
@@ -137,10 +147,10 @@ def getPrompt(custID, productID, customPrompt, credentials):
     custbackground = f'Customer Name is {Customer_Name}.{Customer_Name} is a {Customer_Age} years old {Customer_Gender} living in {Customer_Geography}. {Customer_Name} is having a relationship with bank since past {Customer_Tenure} years. {Customer_Name} is having credit score of {Customer_Credit_Score}. Current balance in {Customer_Name}s account is {Customer_Balance}$.{Customer_Name} is using total {Customer_NoOfProducts} banking products with the bank.{Customer_Name} is also has a credit card with bank. Average salary or income of {Customer_Name} is {Customer_SalaryOrIncome}'
     custbackground2 = f'Customer Name : {Customer_Name},Age : {Customer_Age} years,Gender : {Customer_Gender} ,Location : {Customer_Geography},Relationship with bank : past {Customer_Tenure} years,credit score : {Customer_Credit_Score} ,Current balance : {Customer_Balance}$,Total Products used : {Customer_NoOfProducts}  ,Average salary or income : {Customer_SalaryOrIncome}$'
 
-    context = 'I am a Relationship manager working with the reputed bank.I like to send a mail to the one of my customer regarding sale of a product. Following are the customer details'
-    guidelines = 'While writing mail follow these guidelines : 1. writes a personilised mail to customer. 2. consider the all details provide to make mail more personlised but don not quote exact figures like account balance or credit score. '
-    productDetails = f'Below are product details which I try to sale from this email . Product Name : {Product_Name} Product Features : {Product_Features}'
-    prompt = context + custbackground2 + guidelines + productDetails + customPrompt + ". Please send the response in HTML format."
+    context = 'My Name is Pramod Karhadkar. I am a Relationship manager working with DSDI Bank.I like to send a mail to the one of my customer regarding sales banking products. Following are the customer details'
+    guidelines = 'While writing mail follow these guidelines : 1. writes a personilised mail to customer. 2. consider all the details provided to make mail more personlised but do not quote exact figures like account balance or credit score.Add one liner or word greeting in the local language as per his region. Rest of mail should be in English.Do not use any placeholder in email.'  
+    productDetails = f'Below are product/Products details which I like to sale from this email . {product_details_str}'
+    promt = context + custbackground2 + guidelines + product_details_str + '.' + customPrompt + ". Please send the response in HTML format."
     return prompt
 
 
