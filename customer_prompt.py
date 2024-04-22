@@ -150,7 +150,7 @@ def getPrompt(custID, productID, customPrompt, credentials):
     context = 'My Name is Pramod Karhadkar. I am a Relationship manager working with DSDI Bank.I like to send a mail to the one of my customer regarding sales banking products. Following are the customer details'
     guidelines = 'While writing mail follow these guidelines : 1. writes a personilised mail to customer. 2. consider all the details provided to make mail more personlised but do not quote exact figures like account balance or credit score.Add one liner or word greeting in the local language as per his region. Rest of mail should be in English.Do not use any placeholder in email.'  
     productDetails = f'Below are product/Products details which I like to sale from this email . {product_details_str}'
-    promt = context + custbackground2 + guidelines + product_details_str + '.' + customPrompt + ". Please send the response in HTML format."
+    prompt = context + custbackground2 + guidelines + product_details_str + '.' + customPrompt + ". Please send the response in HTML format."
     return prompt
 
 
