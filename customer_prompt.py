@@ -4,6 +4,8 @@ import pandas as pd
 from pymongo import MongoClient
 import json
 import certifi
+# Import the Secret Manager client library.
+from google.cloud import secretmanager
 
 # custdf= pd.read_csv('CustData.csv')
 # productdf = pd.read_csv('productData.csv')
@@ -13,7 +15,23 @@ import certifi
 # custID = 15737888
 # productID = 2
 
+def list_secrets(project_id: str) -> None:
+    """
+    List all secrets in the given project.
+    """
+    
+    # Create the Secret Manager client.
+    client = secretmanager.SecretManagerServiceClient()
+
+    # Build the resource name of the parent project.
+    parent = f"projects/{project_id}"
+
+    # List all secrets.
+    for secret in client.list_secrets(request={"parent": parent}):
+        print(f"Found secret: {secret.name}")
+
 def get_customer_info(customer_id):
+    list_secrets('starlit-zoo-420014')
     client = MongoClient('mongodb+srv://dilsedigital007:wh1teMayur@cluster0.opahplu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', tlsCAFile=certifi.where())
     mydatabase = client.RMApp
     mycollection = mydatabase.CustData
@@ -37,6 +55,7 @@ def get_customer_info(customer_id):
     return json.dumps(result_json)
 
 def customers_list(customer_name):
+    list_secrets('starlit-zoo-420014')
     client = MongoClient('mongodb+srv://dilsedigital007:wh1teMayur@cluster0.opahplu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', tlsCAFile=certifi.where())
     mydatabase = client.RMApp
     mycollection = mydatabase.CustData
@@ -69,6 +88,7 @@ def customers_list(customer_name):
     return json.dumps(final_result)
 
 def getPrompt(custID, productID, customPrompt):
+    list_secrets('starlit-zoo-420014')
     print(int(custID))
     print(int(productID))
     print("Custom Prompt :" + customPrompt)
