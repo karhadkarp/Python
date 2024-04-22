@@ -23,7 +23,7 @@ curl -X POST -H "Content-Type: application/json" -d '{"customer_id": "15634602"}
 curl -X POST -H "Content-Type: application/json" -d '{"prompt": "can you prepare an e-mail for webinar on Generative AI on Sunday 10th April at 9 am. The target audience is anyone who is interested in learning Generative AI features. e-mail should contain text and images.", "temperature": "0.6"}' http://35.244.22.147:8081/send_data
 
 
-curl -X POST -H "Content-Type: application/json" -d '{"customer_id": "15737888","product_id": "3", "temperature": "0.6","custom_prompt" : "This should be in html format"}' http://35.244.22.147:8081/send_customer_data
+curl -X POST -H "Content-Type: application/json" -d '{"custom_prompt":"Give me important contents in red and bold","product_id":[2,11,18],"customer_id":15634602,"temperature":0.5}' http://35.244.22.147:8081/send_customer_data
 -------------------
 
 ON GCP VM :
