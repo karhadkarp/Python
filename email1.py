@@ -22,7 +22,8 @@ def multiturn_generate_content(prompt,temperature):
   )
 
   #print(GenerationResponse.text)
-  return GenerationResponse.text
+  prompt = GenerationResponse.text + ". Please send the response in HTML format."
+  return prompt
 
 def setTemperature(temperature):
 
