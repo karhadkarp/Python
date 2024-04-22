@@ -12,14 +12,6 @@ from vertexai.generative_models import GenerativeModel, Part
 import vertexai.preview.generative_models as generative_models
 
 
-# custdf= pd.read_csv('CustData.csv')
-# productdf = pd.read_csv('productData.csv')
-# custID = 15701354
-# productID = 4
-# ***********HardCode Values************************
-# custID = 15737888
-# productID = 2
-
 def get_database_creds(project_id: str, secret_id: str, version_id: int):
     # Create the Secret Manager client.
     client = secretmanager.SecretManagerServiceClient()
