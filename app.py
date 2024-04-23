@@ -1,11 +1,13 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import email1
 import customer_prompt
 
 app = Flask(__name__)
 CORS(app)
 
+project_id = 'starlit-zoo-420014'
+secret_id = 'DBPass'
+version_id = 1
 
 @app.route('/send_data', methods=['POST'])
 def send_data():
@@ -22,7 +24,8 @@ def send_data():
             temperature = value
         print("Prompt is: ", prompt)
         print("Temperature is: ", temperature)
-    content = email1.multiturn_generate_content(prompt, temperature)
+
+    content = customer_prompt.multiturn_generate_content(prompt, temperature, project_id)
     print(content)
     return content
 
@@ -47,8 +50,10 @@ def send_customer_data():
         if key == "temperature":
             temperature = value
         print("Temperature is: ", temperature)
-    prompt = customer_prompt.getPrompt(customer_id, product_id, custom_prompt)
-    content = email1.multiturn_generate_content(prompt, temperature)
+
+    credentials = customer_prompt.get_database_creds(project_id, secret_id, version_id)
+    prompt = customer_prompt.getPrompt(customer_id, product_id, custom_prompt, credentials)
+    content = customer_prompt.multiturn_generate_content(prompt, temperature, project_id)
     print(content)
     return content
 
@@ -62,7 +67,9 @@ def get_products():
     for key, value in data.items():
         if key == "customer_id":
             customer_id = value
-    cust_products_json = customer_prompt.get_customer_info(int(customer_id))
+
+    credentials = customer_prompt.get_database_creds(project_id, secret_id, version_id)
+    cust_products_json = customer_prompt.get_customer_info(int(customer_id), credentials)
     return cust_products_json
 
 @app.route('/customers', methods=['POST'])
@@ -75,7 +82,9 @@ def get_customers():
     for key, value in data.items():
         if key == "customer_name":
             customer_name = value
-    cust_products_json = customer_prompt.customers_list(customer_name)
+
+    credentials = customer_prompt.get_database_creds(project_id, secret_id, version_id)
+    cust_products_json = customer_prompt.customers_list(customer_name, credentials)
     return cust_products_json
 
 
