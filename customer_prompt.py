@@ -119,7 +119,7 @@ def getPrompt(custID, productID, customPrompt, credentials):
     for product in productID:
         cursor = mycollection.find({"ProductID": int(product)})
         productdf2 = pd.DataFrame(list(cursor))
-            
+        pd.options.display.max_colwidth = 200  
             # Appending product details to the list
         Product_Name = productdf2['ProductName'].to_string(index=False)
         Product_Features = productdf2['Features'].to_string(index=False)
@@ -149,8 +149,8 @@ def getPrompt(custID, productID, customPrompt, credentials):
     custbackground = f'Customer Name is {Customer_Name}.{Customer_Name} is a {Customer_Age} years old {Customer_Gender} living in {Customer_Geography}. {Customer_Name} is having a relationship with bank since past {Customer_Tenure} years. {Customer_Name} is having credit score of {Customer_Credit_Score}. Current balance in {Customer_Name}s account is {Customer_Balance}$.{Customer_Name} is using total {Customer_NoOfProducts} banking products with the bank.{Customer_Name} is also has a credit card with bank. Average salary or income of {Customer_Name} is {Customer_SalaryOrIncome}'
     custbackground2 = f'Customer Name : {Customer_Name},Age : {Customer_Age} years,Gender : {Customer_Gender} ,Location : {Customer_Geography},Relationship with bank : past {Customer_Tenure} years,credit score : {Customer_Credit_Score} ,Current balance : {Customer_Balance}$,Total Products used : {Customer_NoOfProducts}  ,Average salary or income : {Customer_SalaryOrIncome}$'
 
-    context = 'My Name is Pramod Karhadkar. I am a Relationship manager working with DSDI Bank.I like to send a mail to the one of my customer regarding sales banking products. Following are the customer details'
-    guidelines = 'While writing mail follow these guidelines : 1. writes a personilised mail to customer. 2. consider all the details provided to make mail more personlised but do not quote exact figures like account balance or credit score.Add one liner or word greeting in the local language as per his region. Rest of mail should be in English.Do not use any placeholder in email.'  
+    context = 'My Name is Pramod Karhadkar. I am a Relationship manager working with DSDI Bank.My Mobile is +919923099230 and email is Pramod.K@dsdi.com. Use info related to me in signature. I like to send a mail to the one of my customer regarding sales banking products. Following are the customer details'
+    guidelines = '.'+'When drafting emails, ensure they are personalized for each customer. Take into account all provided details to maximize personalization, but refrain from quoting exact figures such as account balances or credit scores. Additionally, include a one-liner or word greeting in the recipients local language according to their region. However, please note that the entirety of the email content, aside from the greeting, should be written in English. Avoid using any placeholders in the email.'  
     productDetails = f'Below are product/Products details which I like to sale from this email . {product_details_str}'
     prompt = context + custbackground2 + guidelines + product_details_str + '.' + customPrompt + ". Please send the response in HTML format."
     return prompt
