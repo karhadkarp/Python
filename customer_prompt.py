@@ -21,7 +21,7 @@ def get_database_creds(project_id: str, secret_id: str, version_id: int):
 
     # Access the secret version.
     response = client.access_secret_version(name=name)
-    print(response.payload.data.decode('UTF-8'))
+    #print(response.payload.data.decode('UTF-8'))
     # Return the decoded payload.
     return response.payload.data.decode('UTF-8')
 
