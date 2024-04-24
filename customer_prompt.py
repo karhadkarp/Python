@@ -178,7 +178,7 @@ def multiturn_generate_content(prompt, temperature, project_id, location_id="asi
 
 def setTemperature(temperature):
     generation_config = {
-        "max_output_tokens": 2048,
+        "max_output_tokens": 4096,
         "temperature": float(temperature),
         "top_p": 1,
     }
