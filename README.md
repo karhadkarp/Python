@@ -44,5 +44,7 @@ source ./bin/activate
 
 pip3 install -r ./requirements.txt
 
+nohup python3 app.py &
+
 curl -X POST -H "Content-Type: application/json" -d '{"prompt": "can you prepare an e-mail for webinar on Generative AI on Sunday 10th April at 9 am. The target audience is anyone who is interested in learning Generative AI features. e-mail should contain text and images.", "temperature": "0.6"}' http://35.244.22.147:5000/send_data
 
