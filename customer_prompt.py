@@ -94,7 +94,6 @@ def customers_list(customer_name, credentials):
 
 def getPrompt(custID, productID, customPrompt, credentials):
     print(int(custID))
-    print(int(productID))
     print("Custom Prompt :" + customPrompt)
     client = MongoClient(
         'mongodb+srv://' + credentials + '@cluster0.opahplu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
@@ -117,7 +116,7 @@ def getPrompt(custID, productID, customPrompt, credentials):
     # Fetching product details for each product ID
     product_details = []
     for product in productID:
-        cursor = mycollection.find({"ProductID": int(product)})
+        cursor = mycollection.find({"ProductID": product})
         productdf2 = pd.DataFrame(list(cursor))
         pd.options.display.max_colwidth = 200  
             # Appending product details to the list
