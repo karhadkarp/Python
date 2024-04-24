@@ -116,7 +116,7 @@ def getPrompt(custID, productID, customPrompt, credentials):
     for product in productID:
         cursor = mycollection.find({"ProductID": product})
         productdf2 = pd.DataFrame(list(cursor))
-
+        pd.options.display.max_colwidth = 200 
         # Appending product details to the list
         Product_Name = productdf2['ProductName'].to_string(index=False)
         Product_Features = productdf2['Features'].to_string(index=False)
