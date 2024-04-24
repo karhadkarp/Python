@@ -68,6 +68,7 @@ def customers_list(customer_name, credentials):
     for item in listofDocuments:
         cust_name = item['Custname']
         customer_id = item['CustomerId']
+        cust_geography = item['Geography']
         sug_products_list = []
         if ('SugProdID1' in item.keys()):
             sug_products_list.append(item['SugProdID1'])
@@ -84,7 +85,8 @@ def customers_list(customer_name, credentials):
             result_json = {
                 'customer_id': customer_id,
                 'cust_name': cust_name,
-                'sug_products': sug_products_2d
+                'sug_products': sug_products_2d,
+                'cust_geography': cust_geography
             }
             final_result.append(result_json)
     return json.dumps(final_result)
