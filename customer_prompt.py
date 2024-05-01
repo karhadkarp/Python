@@ -121,7 +121,7 @@ def getPrompt(custID, productID, customPrompt, credentials):
         # Appending product details to the list
         Product_Name = productdf2['ProductName'].to_string(index=False)
         Product_Features = productdf2['Features'].to_string(index=False)
-        product_details.append(f'Product Name : {Product_Name} Product Features : {Product_Features}')
+        product_details.append(f'\n Product Name : {Product_Name} Product Features : {Product_Features}')
 
     # Concatenating product details for the current product
     product_details_str = ' '.join(product_details)
