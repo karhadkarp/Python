@@ -49,7 +49,7 @@ def send_customer_data():
             customer_id = value
         if key == "temperature":
             temperature = value
-        print("Temperature is: ", temperature)
+            print("Temperature is: ", temperature)
 
     credentials = customer_prompt.get_database_creds(project_id, secret_id, version_id)
     prompt = customer_prompt.getPrompt(customer_id, product_id, custom_prompt, credentials)
