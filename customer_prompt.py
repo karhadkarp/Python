@@ -156,9 +156,11 @@ def getPrompt(custID, productID, customPrompt, credentials):
 
 
 def multiturn_generate_content(prompt, temperature, project_id, location_id="asia-south1"):
+    print("------------------------------------------------------------------------------")
     print("Temperature is :", temperature)
     generation_config = setTemperature(temperature)
     print("Prompt: ", prompt)
+    print("------------------------------------------------------------------------------")
     prompt = prompt + ". Please send the response in HTML format."
     vertexai.init(project=project_id, location=location_id)
     model = GenerativeModel(
