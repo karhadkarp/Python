@@ -122,7 +122,7 @@ def getPrompt(custID, productID, customPrompt, credentials):
         # Appending product details to the list
         Product_Name = productdf2['ProductName'].to_string(index=False)
         Product_Features = productdf2['Features'].to_string(index=False)
-        product_details.append(f'Product Name : {Product_Name}\nProduct Features : {Product_Features}')
+        product_details.append(f'Product Name : {Product_Name} Product Features : {Product_Features}')
 
     # Concatenating product details for the current product
     product_details_str = ' '.join(product_details)
@@ -146,10 +146,10 @@ def getPrompt(custID, productID, customPrompt, credentials):
     Product_Features = productdf2['Features'].to_string(index=False)
 
     custbackground = f'Customer Name is {Customer_Name}.{Customer_Name} is a {Customer_Age} years old {Customer_Gender} living in {Customer_Geography}. {Customer_Name} is having a relationship with bank since past {Customer_Tenure} years. {Customer_Name} is having credit score of {Customer_Credit_Score}. Current balance in {Customer_Name}s account is {Customer_Balance}$.{Customer_Name} is using total {Customer_NoOfProducts} banking products with the bank.{Customer_Name} is also has a credit card with bank. Average salary or income of {Customer_Name} is {Customer_SalaryOrIncome}'
-    custbackground2 = f'Customer Name : {Customer_Name},Age : {Customer_Age} years,Gender : {Customer_Gender} ,Location : {Customer_Geography},Relationship with bank : past {Customer_Tenure} years,credit score : {Customer_Credit_Score} ,Current balance : {Customer_Balance}$,Total Products used : {Customer_NoOfProducts}  ,Average salary or income : {Customer_SalaryOrIncome}$'
+    custbackground2 = f'Customer Name : {Customer_Name}, Age : {Customer_Age} years, Gender : {Customer_Gender}, Location : {Customer_Geography}, Relationship with bank : past {Customer_Tenure} years, Credit score : {Customer_Credit_Score}, Current balance : {Customer_Balance}$, Total Products used : {Customer_NoOfProducts}, Average salary or income : {Customer_SalaryOrIncome}$'
 
-    context = 'My Name is Pramod Karhadkar. I am a Relationship manager working with DSDI Bank. I like to send a mail to the one of my customer regarding sales banking products. \n Following are the customer details: '
-    guidelines = '.'+'\n When drafting emails, ensure they are personalized for each customer. Take into account all provided details to maximize personalization, but you must not include account balances, credit scores or Average salary or income. Additionally, include a one-liner or word greeting in the recipients local language according to their region. However remaining e-mail body must be English, aside from the greeting. Avoid using any placeholders in the email.Please append the following signature : Pramod Karhadkar\n Relationship Manager, DSDI Bank\n Phone : +9198xx888888\n Email:pramod.k@dsdi.com. Please do not add extra line space in signature.'    
+    context = 'My Name is Pramod Karhadkar. I am a Relationship manager working with DSDI Bank. I like to send a mail to the one of my customer regarding sales banking products.\nFollowing are the customer details: '
+    guidelines = '.'+'\nWhen drafting emails, ensure they are personalized for each customer. Take into account all provided details to maximize personalization, but you must not include account balances, credit scores or Average salary or income. Additionally, include a one-liner or word greeting in the recipients local language according to their region. However remaining e-mail body must be English, aside from the greeting. Avoid using any placeholders in the email.Please append the following signature : Pramod Karhadkar\n Relationship Manager, DSDI Bank\n Phone : +9198xx888888\n Email:pramod.k@dsdi.com. Please do not add extra line space in signature.'    
     productDetails = f'\n Below are product/Products details which I like to sale from this email . {product_details_str}'
     prompt = context + custbackground2 + guidelines + product_details_str + '.' + customPrompt + ". Please send the response in HTML format."
     return prompt
